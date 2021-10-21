@@ -4,7 +4,7 @@ author: "Jeremy Holden"
 date: "Compile on `r format(Sys.time(), '%d %B, %Y')`"
 output: html_document
 params:
-  datazip: ~/FNData/NS1/IA02_NS1/DATA.ZIP
+  datazip: ~/Fishnet/GL1/IA18_GL1/DATA.ZIP
 ---
 <!-- this document is intended to be run using "knit with parameters" -->
 <!-- the user can then provide a file path to a DATA.ZIP file to generate a report -->
@@ -52,6 +52,34 @@ if("AREA" %in% fndat$FN121){
 library(leaflet)
 leaflet(fndat$FN121) |> addTiles() |> addCircles(lat =~DD_LAT0, lng = ~DD_LON0)
 ```
+
+### check for missing coordinate
+```{r}
+##want to make these give message outputs i.e. if true return table, if false return "none"
+filter(fndat$FN121, is.na(DD_LAT0))
+filter(fndat$FN121, is.na(DD_LON0))
+filter(fndat$FN121, is.na(DD_LAT1))
+filter(fndat$FN121, is.na(DD_LON1))
+```
+
+## FN123
+### Check for NA's in CATCNT, SUBCNT, CATWT, CATWT
+```{r}
+fn123<-fndat$FN123
+filter(fn123,is.na(CATCNT))
+filter(fn123,is.na(CATWT))
+filter(fn123,is.na(SUBCNT))
+filter(fn123,is.na(SUBWT))
+
+
+```
+### Check for BIOCNT > CATCNT
+```{r}
+fn123$BIOCNT<-is.numeric(fn123$BIOCNT)
+fn123$CATCNT<-is.numeric(fn123$CATCNT)
+fn123%>%filter(BIOCNT>CATCNT)
+```
+
 
 ## FN125
 ```{r fn125}
